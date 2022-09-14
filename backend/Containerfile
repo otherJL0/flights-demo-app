@@ -1,0 +1,18 @@
+FROM python:3.10-buster as build
+
+RUN mkdir -p /opt/flightsapi
+WORKDIR /opt/flightsapi
+
+COPY . .
+RUN pip install --no-cache-dir --upgrade pip && pip install --no-cache-dir flit && flit build
+
+FROM python:3.10-buster
+RUN mkdir -p /opt/flightsapi
+WORKDIR /opt/flightsapi
+
+COPY --from=build /opt/flightsapi/dist/flightsapi*.whl /opt/flightsapi/
+RUN pip install --no-cache-dir /opt/flightsapi/flightsapi*.whl
+
+EXPOSE 5000
+
+CMD flightsapi-run
