@@ -17,4 +17,4 @@ test = ["pytest"]
 dev = ["flit", "pip-tools", "pex", "thx", "black", "flake8", "mypy", "isort", "debugpy"]
 
 [project.scripts]
-flightsapi-run = "flightsapi:main"
+flightsapi-run = "flightsapi:app"

@@ -1,7 +1,7 @@
 """ API for Postgres sample database"""
 __version__ = "0.1.0"
 
-from .main import main
+from flightsapi.main import app
 
 if __name__ == "__main__":
-    main()
+    print(f"flightsapi{__version__}")
