@@ -1,0 +1,19 @@
+FROM busybox:stable as deps
+RUN mkdir -p /opt/data
+WORKDIR /opt/data
+ARG size=small
+ENV DEMODB "demo-${size}-en.zip"
+RUN wget -q https://edu.postgrespro.com/$DEMODB && unzip $DEMODB && rm $DEMODB
+RUN sed -i 's/DROP DATABASE/DROP DATABASE IF EXISTS/' ./*.sql
+
+FROM postgres:14
+
+
+# ENV POSTGRES_USER postgres
+ENV POSTGRES_USER testuser
+ENV POSTGRES_PASSWORD testuserpassword
+# ENV POSTGRES_DB demo
+
+RUN mkdir -p /docker-entrypoint-initdb.d
+WORKDIR /docker-entrypoint-initdb.d
+COPY --from=deps /opt/data/demo-*.sql .
