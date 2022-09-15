@@ -1,18 +1,13 @@
 FROM python:3.10-buster as build
+ENV UVICORN_PORT 5000
+ENV UVICORN_HOST 0.0.0.0
+ENV FLIT_ROOT_INSTALL 1
 
 RUN mkdir -p /opt/flightsapi
 WORKDIR /opt/flightsapi
 
 COPY . .
-RUN pip install --no-cache-dir --upgrade pip && pip install --no-cache-dir flit && flit build
-
-FROM python:3.10-buster
-RUN mkdir -p /opt/flightsapi
-WORKDIR /opt/flightsapi
-
-COPY --from=build /opt/flightsapi/dist/flightsapi*.whl /opt/flightsapi/
-RUN pip install --no-cache-dir /opt/flightsapi/flightsapi*.whl
-
+RUN pip install --no-cache-dir --upgrade pip && pip install --no-cache-dir flit && flit install
 EXPOSE 5000
 
-CMD flightsapi-run
+CMD uvicorn flightsapi.main:app
