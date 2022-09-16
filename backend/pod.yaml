@@ -1,0 +1,30 @@
+# Save the output of this file and use kubectl create -f to import
+# it into Kubernetes.
+#
+# Created with podman-4.2.0
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    io.kubernetes.cri-o.TTY/flights-fastapi: "false"
+    io.podman.annotations.autoremove/flights-fastapi: "FALSE"
+    io.podman.annotations.init/flights-fastapi: "FALSE"
+    io.podman.annotations.privileged/flights-fastapi: "FALSE"
+    io.podman.annotations.publish-all/flights-fastapi: "FALSE"
+    org.opencontainers.image.base.digest/flights-fastapi: sha256:82330739efa2cd47660252c03512fa4efc59a12fb13e110b21bcb782
+    org.opencontainers.image.base.name/flights-fastapi: docker.io/library/python:3.10-buster
+  creationTimestamp: "2022-09-16T15:10:20Z"
+  labels:
+    app: flights-fastapi-pod
+  name: flights-fastapi-pod
+spec:
+  containers:
+  - image: localhost/flights-fastapi:latest
+    name: flights-fastapi
+    securityContext:
+      capabilities:
+        drop:
+        - CAP_MKNOD
+        - CAP_NET_RAW
+        - CAP_AUDIT_WRITE
+

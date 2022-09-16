@@ -1,0 +1,49 @@
+# Save the output of this file and use kubectl create -f to import
+# it into Kubernetes.
+#
+# Created with podman-4.2.0
+
+# NOTE: If you generated this yaml from an unprivileged and rootless podman container on an SELinux
+# enabled system, check the podman generate kube man page for steps to follow to ensure that your pod/container
+# has the right permissions to access the volumes added.
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    io.kubernetes.cri-o.TTY/flights-postgres: "true"
+    io.podman.annotations.autoremove/flights-postgres: "TRUE"
+    io.podman.annotations.init/flights-postgres: "FALSE"
+    io.podman.annotations.privileged/flights-postgres: "FALSE"
+    io.podman.annotations.publish-all/flights-postgres: "FALSE"
+    org.opencontainers.image.base.digest/flights-postgres: sha256:42cf731b71cf2e6a5730f10bbef6ee52122a97799278f00d38cd3c06
+    org.opencontainers.image.base.name/flights-postgres: docker.io/library/postgres:14
+  creationTimestamp: "2022-09-16T15:11:57Z"
+  labels:
+    app: flights-postgres-pod
+  name: flights-postgres-pod
+spec:
+  containers:
+  - args:
+    - postgres
+    image: localhost/flights-postgres:latest
+    name: flights-postgres
+    ports:
+    - containerPort: 5432
+      hostPort: 5432
+    securityContext:
+      capabilities:
+        drop:
+        - CAP_MKNOD
+        - CAP_NET_RAW
+        - CAP_AUDIT_WRITE
+    stdin: true
+    tty: true
+    volumeMounts:
+    - mountPath: /var/lib/postgresql/data
+      name: 0acab9fa8436aa6f6c17b295440a5923da85127c49132b38ea4ab44e243844bb-pvc
+  volumes:
+  - name: 0acab9fa8436aa6f6c17b295440a5923da85127c49132b38ea4ab44e243844bb-pvc
+    persistentVolumeClaim:
+      claimName: 0acab9fa8436aa6f6c17b295440a5923da85127c49132b38ea4ab44e243844bb
+
